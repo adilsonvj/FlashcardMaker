@@ -1,0 +1,14 @@
+__pycache__/
+*.pyc
+
+audios/
+inputs/
+outputs/
+
+anki_flashcards_import.csv
+anki_flashcards_import_en.csv
+anki_flashcards_manual_review.csv
+anki_flashcards_manual_review_en.csv
+
+.env
+.env.local
