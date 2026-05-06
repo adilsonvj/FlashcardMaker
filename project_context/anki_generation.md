@@ -17,7 +17,7 @@ Tambem sao gerados CSVs de revisao manual:
 ## Fontes usadas
 
 - `outputs/*.csv`
-- `audios/*.ogg`
+- `audios/*.mp3`
 
 ## Regra de deduplicacao
 
@@ -67,9 +67,14 @@ Mas ela nao some do fluxo:
 
 ## Relacao entre link e arquivo local
 
-Os audios locais foram nomeados com esta convencao:
+Os audios finais usados pelo Anki sao MP3 e seguem esta convencao:
 
-- `<palavra_sanitizada>__<ARTICLE_ID>.ogg`
+- `<palavra_sanitizada>__<ARTICLE_ID>.mp3`
+
+Observacao:
+
+- o enriquecimento pode baixar audio fonte em OGG
+- a geracao dos cards converte esse audio para MP3 com `ffmpeg`
 
 Para reencontrar o audio certo, o script usa:
 

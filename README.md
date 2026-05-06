@@ -24,11 +24,12 @@ This project is useful if you are studying Luxembourgish and want a repeatable w
 - `enrich_lod_csv.py`
   - reads raw input CSV files from `inputs/`
   - creates enriched CSV files in `outputs/`
-  - downloads audio into `audios/`
+  - downloads source audio into `audios/`
 
 - `generate_anki_cards.py`
   - reads enriched CSV files from `outputs/`
   - creates Anki import CSV files in the project root
+  - converts local audio to MP3 for Anki cards
   - copies the needed audio files into Anki's media folder
 
 - `project_context/`
@@ -106,7 +107,7 @@ What it does:
 - skips any file that already exists in `outputs/`
 - queries `lod.lu`
 - writes enriched CSV files into `outputs/`
-- downloads OGG audio files into `audios/`
+- downloads source audio files into `audios/`
 
 The output CSV columns are:
 
@@ -253,7 +254,7 @@ So in the normal workflow, you do not need to move audio files by hand.
 If you ever want to do it manually:
 
 1. open `audios/`
-2. copy the `.ogg` files
+2. copy the `.mp3` files
 3. paste them into Anki's `collection.media` folder
 
 ## How to import the cards into Anki Desktop

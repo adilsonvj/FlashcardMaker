@@ -2,7 +2,7 @@
 
 ## Objetivo
 
-O script `enrich_lod_csv.py` lê arquivos CSV com palavras em luxemburguês, consulta a API do `lod.lu`, gera um CSV enriquecido com traduções e links de áudio, e baixa os áudios OGG das palavras.
+O script `enrich_lod_csv.py` lê arquivos CSV com palavras em luxemburguês, consulta a API do `lod.lu`, gera um CSV enriquecido com traduções e links de áudio, e baixa os áudios fonte das palavras.
 
 ## Estrutura de pastas
 
@@ -11,7 +11,8 @@ O script `enrich_lod_csv.py` lê arquivos CSV com palavras em luxemburguês, con
 - `outputs/`
   - recebe CSVs enriquecidos com o mesmo nome do arquivo de entrada
 - `audios/`
-  - recebe os arquivos de áudio OGG baixados do `link audio 1`
+  - recebe os arquivos de áudio fonte baixados do `link audio 1`
+  - também recebe os MP3 gerados para o Anki
 - `project_context/`
   - documentação persistente do fluxo e das decisões
 
@@ -58,10 +59,12 @@ Para cada palavra:
 
 ## Lógica de áudio
 
-- baixar apenas o áudio OGG, correspondente ao `link audio 1`
+- baixar o áudio fonte correspondente ao `link audio 1`
+- o gerador do Anki converte esse áudio para MP3
 - salvar em `audios/`
 - nome do arquivo:
-  - `<palavra_sanitizada>__<article_id>.ogg`
+  - fonte: `<palavra_sanitizada>__<article_id>.ogg`
+  - final Anki: `<palavra_sanitizada>__<article_id>.mp3`
 - se o arquivo já existir, não baixar de novo
 
 ## Cache atual

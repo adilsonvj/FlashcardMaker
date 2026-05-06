@@ -12,3 +12,5 @@ anki_flashcards_manual_review_en.csv
 
 .env
 .env.local
+
+*.pdf

@@ -22,15 +22,20 @@ Motivo:
 - evitar retrabalho
 - permitir adicionar novos CSVs ao longo do tempo
 
-### 3. Formato de áudio escolhido
+### 3. Formato de audio escolhido
 
-Foi decidido baixar apenas um formato de áudio:
+Formato atual para os cards do Anki:
 
-- OGG
+- MP3
 
 Motivo:
-- simplificar o armazenamento
-- o usuário pediu para escolher apenas um formato, usando o equivalente ao `link audio 1`
+- compatibilidade ampla com Anki no desktop e celular
+- o usuario pediu para usar apenas MP3 nos cards
+
+Observacao:
+
+- o enriquecimento ainda pode baixar audio fonte do `lod.lu`
+- o gerador converte para MP3 com `ffmpeg`
 
 ### 4. Feedback visual de progresso
 

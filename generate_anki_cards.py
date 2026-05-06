@@ -5,6 +5,7 @@ import os
 import html
 import re
 import shutil
+import subprocess
 from pathlib import Path
 from urllib.parse import urlparse
 
@@ -100,34 +101,69 @@ def resolve_audio_file(word: str, audio_url: str) -> Path | None:
 
     prefix = f"{sanitize_filename(word)}__"
     candidates = sorted(AUDIO_SOURCE_DIR.glob(f"{prefix}*.ogg"))
+    if not candidates:
+        candidates = sorted(AUDIO_SOURCE_DIR.glob(f"{prefix}*.m4a"))
+    if not candidates:
+        candidates = sorted(AUDIO_SOURCE_DIR.glob(f"{prefix}*.aac"))
     if candidates:
         return candidates[0]
 
     return None
 
 
+def ensure_mp3_audio(source: Path) -> Path:
+    destination = source.with_suffix(".mp3")
+    if destination.exists():
+        return destination
+
+    subprocess.run(
+        [
+            "ffmpeg",
+            "-y",
+            "-loglevel",
+            "error",
+            "-i",
+            str(source),
+            "-codec:a",
+            "libmp3lame",
+            "-q:a",
+            "4",
+            str(destination),
+        ],
+        check=True,
+    )
+    return destination
+
+
 def card_one_front(audio_filename: str) -> str:
     return (
-        '<div style="font-family:Arial,sans-serif;font-size:30px;line-height:1.2;'
-        'text-align:center;">'
-        f'[sound:{html.escape(audio_filename)}]'
+        '<div style="font-family:Arial,sans-serif;min-height:220px;display:flex;align-items:center;'
+        'justify-content:center;background:#e0f2fe;color:#0f172a;border-radius:18px;padding:28px;">'
+        '<div style="display:flex;align-items:center;gap:18px;font-size:44px;font-weight:700;">'
+        '<span style="width:82px;height:82px;border-radius:50%;background:#0369a1;color:white;'
+        'display:inline-flex;align-items:center;justify-content:center;font-size:40px;">&#9658;</span>'
+        f'<span style="font-size:34px;">[sound:{html.escape(audio_filename)}]</span>'
+        "</div>"
         "</div>"
     )
 
 
 def card_one_back(word: str, translation: str) -> str:
     return (
-        '<div style="font-family:Arial,sans-serif;text-align:center;">'
-        f'<div style="font-size:34px;font-weight:700;line-height:1.2;">{html.escape(word)}</div>'
-        f'<div style="font-size:24px;line-height:1.4;margin-top:8px;">({html.escape(translation)})</div>'
+        '<div style="font-family:Arial,sans-serif;min-height:220px;display:flex;flex-direction:column;'
+        'align-items:center;justify-content:center;text-align:center;background:#fff7ed;color:#111827;'
+        'border-radius:18px;padding:28px;">'
+        f'<div style="font-size:48px;font-weight:800;line-height:1.15;">{html.escape(word)}</div>'
+        f'<div style="font-size:32px;line-height:1.35;margin-top:14px;color:#7c2d12;">({html.escape(translation)})</div>'
         "</div>"
     )
 
 
 def card_two_front(translation: str) -> str:
     return (
-        '<div style="font-family:Arial,sans-serif;text-align:center;'
-        'font-size:32px;font-weight:700;line-height:1.2;">'
+        '<div style="font-family:Arial,sans-serif;min-height:220px;display:flex;align-items:center;'
+        'justify-content:center;text-align:center;background:#fef9c3;color:#422006;border-radius:18px;'
+        'padding:28px;font-size:46px;font-weight:800;line-height:1.2;">'
         f'{html.escape(translation)}'
         "</div>"
     )
@@ -135,9 +171,15 @@ def card_two_front(translation: str) -> str:
 
 def card_two_back(word: str, audio_filename: str) -> str:
     return (
-        '<div style="font-family:Arial,sans-serif;text-align:center;">'
-        f'<div style="font-size:34px;font-weight:700;line-height:1.2;">{html.escape(word)}</div>'
-        f'<div style="font-size:30px;line-height:1.2;margin-top:12px;">[sound:{html.escape(audio_filename)}]</div>'
+        '<div style="font-family:Arial,sans-serif;min-height:220px;display:flex;flex-direction:column;'
+        'align-items:center;justify-content:center;text-align:center;background:#dcfce7;color:#052e16;'
+        'border-radius:18px;padding:28px;">'
+        f'<div style="font-size:48px;font-weight:800;line-height:1.15;">{html.escape(word)}</div>'
+        '<div style="display:flex;align-items:center;gap:14px;margin-top:20px;font-size:32px;">'
+        '<span style="width:64px;height:64px;border-radius:50%;background:#15803d;color:white;'
+        'display:inline-flex;align-items:center;justify-content:center;font-size:30px;">&#9658;</span>'
+        f'<span>[sound:{html.escape(audio_filename)}]</span>'
+        "</div>"
         "</div>"
     )
 
@@ -169,6 +211,7 @@ def collect_rows(language: str) -> tuple[list[dict[str, str]], list[dict[str, st
                 audio_link_2 = (row.get("link audio 2") or "").strip()
                 translation = first_translation(translation_full)
                 audio_path = resolve_audio_file(word, audio_link_1)
+                mp3_audio_path = ensure_mp3_audio(audio_path) if audio_path is not None else None
 
                 reasons: list[str] = []
                 if not translation:
@@ -177,6 +220,8 @@ def collect_rows(language: str) -> tuple[list[dict[str, str]], list[dict[str, st
                     reasons.append("sem_link_audio_1")
                 elif audio_path is None:
                     reasons.append("audio_nao_encontrado_na_pasta_audios")
+                elif mp3_audio_path is None:
+                    reasons.append("mp3_nao_gerado")
 
                 if reasons:
                     review_rows.append(
@@ -196,8 +241,8 @@ def collect_rows(language: str) -> tuple[list[dict[str, str]], list[dict[str, st
                     {
                         "luxemburgues": word,
                         "translation": translation,
-                        "audio_filename": audio_path.name,
-                        "audio_path": str(audio_path),
+                        "audio_filename": mp3_audio_path.name,
+                        "audio_path": str(mp3_audio_path),
                     }
                 )
 

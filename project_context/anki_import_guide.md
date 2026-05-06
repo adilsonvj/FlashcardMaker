@@ -63,7 +63,7 @@ Entao, neste computador, normalmente nao e preciso mover manualmente nada, desde
 Se alguem for fazer manualmente:
 
 1. abrir a pasta `audios/`
-2. copiar os arquivos `.ogg`
+2. copiar os arquivos `.mp3`
 3. colar dentro de `collection.media`
 
 ## Como importar os cards no Anki
