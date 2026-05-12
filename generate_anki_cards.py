@@ -135,53 +135,45 @@ def ensure_mp3_audio(source: Path) -> Path:
     return destination
 
 
-def card_one_front(audio_filename: str) -> str:
-    return (
-        '<div style="font-family:Arial,sans-serif;min-height:220px;display:flex;align-items:center;'
-        'justify-content:center;background:#e0f2fe;color:#0f172a;border-radius:18px;padding:28px;">'
-        '<div style="display:flex;align-items:center;gap:18px;font-size:44px;font-weight:700;">'
-        '<span style="width:82px;height:82px;border-radius:50%;background:#0369a1;color:white;'
-        'display:inline-flex;align-items:center;justify-content:center;font-size:40px;">&#9658;</span>'
-        f'<span style="font-size:34px;">[sound:{html.escape(audio_filename)}]</span>'
-        "</div>"
-        "</div>"
-    )
-
-
-def card_one_back(word: str, translation: str) -> str:
+def luxembourgish_audio_side(word: str, audio_filename: str, background: str, color: str, button_color: str) -> str:
     return (
         '<div style="font-family:Arial,sans-serif;min-height:220px;display:flex;flex-direction:column;'
-        'align-items:center;justify-content:center;text-align:center;background:#fff7ed;color:#111827;'
+        f'align-items:center;justify-content:center;text-align:center;background:{background};color:{color};'
         'border-radius:18px;padding:28px;">'
-        f'<div style="font-size:48px;font-weight:800;line-height:1.15;">{html.escape(word)}</div>'
-        f'<div style="font-size:32px;line-height:1.35;margin-top:14px;color:#7c2d12;">({html.escape(translation)})</div>'
+        f'<div style="font-size:52px;font-weight:800;line-height:1.15;">{html.escape(word)}</div>'
+        '<div style="display:flex;align-items:center;gap:14px;margin-top:22px;font-size:34px;">'
+        f'<span style="width:72px;height:72px;border-radius:50%;background:{button_color};color:white;'
+        'display:inline-flex;align-items:center;justify-content:center;font-size:34px;">&#9658;</span>'
+        f'<span>[sound:{html.escape(audio_filename)}]</span>'
+        "</div>"
         "</div>"
     )
 
 
-def card_two_front(translation: str) -> str:
+def translation_side(translation: str, background: str, color: str) -> str:
     return (
         '<div style="font-family:Arial,sans-serif;min-height:220px;display:flex;align-items:center;'
-        'justify-content:center;text-align:center;background:#fef9c3;color:#422006;border-radius:18px;'
-        'padding:28px;font-size:46px;font-weight:800;line-height:1.2;">'
+        f'justify-content:center;text-align:center;background:{background};color:{color};border-radius:18px;'
+        'padding:28px;font-size:48px;font-weight:800;line-height:1.2;">'
         f'{html.escape(translation)}'
         "</div>"
     )
 
 
+def card_one_front(word: str, audio_filename: str) -> str:
+    return luxembourgish_audio_side(word, audio_filename, "#e0f2fe", "#0f172a", "#0369a1")
+
+
+def card_one_back(translation: str) -> str:
+    return translation_side(translation, "#fff7ed", "#7c2d12")
+
+
+def card_two_front(translation: str) -> str:
+    return translation_side(translation, "#fef9c3", "#422006")
+
+
 def card_two_back(word: str, audio_filename: str) -> str:
-    return (
-        '<div style="font-family:Arial,sans-serif;min-height:220px;display:flex;flex-direction:column;'
-        'align-items:center;justify-content:center;text-align:center;background:#dcfce7;color:#052e16;'
-        'border-radius:18px;padding:28px;">'
-        f'<div style="font-size:48px;font-weight:800;line-height:1.15;">{html.escape(word)}</div>'
-        '<div style="display:flex;align-items:center;gap:14px;margin-top:20px;font-size:32px;">'
-        '<span style="width:64px;height:64px;border-radius:50%;background:#15803d;color:white;'
-        'display:inline-flex;align-items:center;justify-content:center;font-size:30px;">&#9658;</span>'
-        f'<span>[sound:{html.escape(audio_filename)}]</span>'
-        "</div>"
-        "</div>"
-    )
+    return luxembourgish_audio_side(word, audio_filename, "#dcfce7", "#052e16", "#15803d")
 
 
 def collect_rows(language: str) -> tuple[list[dict[str, str]], list[dict[str, str]]]:
@@ -269,7 +261,7 @@ def write_import_csv(rows: list[dict[str, str]], destination: Path) -> None:
             translation = row["translation"]
             audio_filename = row["audio_filename"]
 
-            writer.writerow([card_one_front(audio_filename), card_one_back(word, translation)])
+            writer.writerow([card_one_front(word, audio_filename), card_one_back(translation)])
             writer.writerow([card_two_front(translation), card_two_back(word, audio_filename)])
 
 

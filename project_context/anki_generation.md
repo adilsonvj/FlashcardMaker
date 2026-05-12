@@ -42,13 +42,13 @@ Cada palavra valida gera exatamente dois cards por idioma exportado.
 
 ### Card 1
 
-- frente: audio
-- verso: palavra em luxemburgues + traducao entre parenteses
+- frente: palavra em luxemburgues + audio
+- verso: palavra traduzida
 
 ### Card 2
 
 - frente: palavra traduzida
-- verso: audio + palavra em luxemburgues
+- verso: palavra em luxemburgues + audio
 
 ## Regra de elegibilidade
 

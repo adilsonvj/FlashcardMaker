@@ -148,29 +148,25 @@ Files generated:
 
 Card type 1:
 
-- front: audio only
-- back: Luxembourgish word
-- next line: first Portuguese translation in parentheses
+- front: Luxembourgish word and audio
+- back: first Portuguese translation only
 
 Card type 2:
 
 - front: first Portuguese translation only
-- back: Luxembourgish word
-- next line: audio
+- back: Luxembourgish word and audio
 
 ### English deck
 
 Card type 1:
 
-- front: audio only
-- back: Luxembourgish word
-- next line: first English translation in parentheses
+- front: Luxembourgish word and audio
+- back: first English translation only
 
 Card type 2:
 
 - front: first English translation only
-- back: Luxembourgish word
-- next line: audio
+- back: Luxembourgish word and audio
 
 ## Manual review files
 

@@ -127,29 +127,25 @@ Se o arquivo ja tiver sido importado antes, o ideal e importar em um baralho de 
 
 Card 1:
 
-- frente: audio
-- verso: palavra em luxemburgues
-- linha abaixo: traducao em portugues entre parenteses
+- frente: palavra em luxemburgues + audio
+- verso: traducao em portugues
 
 Card 2:
 
 - frente: primeira traducao em portugues
-- verso: palavra em luxemburgues
-- linha abaixo: audio
+- verso: palavra em luxemburgues + audio
 
 ### CSV em ingles
 
 Card 1:
 
-- frente: audio
-- verso: palavra em luxemburgues
-- linha abaixo: traducao em ingles entre parenteses
+- frente: palavra em luxemburgues + audio
+- verso: traducao em ingles
 
 Card 2:
 
 - frente: primeira traducao em ingles
-- verso: palavra em luxemburgues
-- linha abaixo: audio
+- verso: palavra em luxemburgues + audio
 
 ## Como lidar com os casos incompletos
 
